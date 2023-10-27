@@ -569,7 +569,7 @@
     ```
 
   <a name="functions--constructor"></a><a name="7.10"></a>
-  - [7.10](#functions--constructor) Never use the Function constructor to create a new function. eslint: [`no-new-func`](https://eslint.org/docs/rules/no-new-func)
+  - [7.10](#functions--constructor) Never use the Function constructor to create a new function. [`no-new-func`](https://eslint.org/docs/rules/no-new-func)
 
     > Criar uma função desta forma a string se assemelha a `eval()`, que o deixa frágil.
 
@@ -757,7 +757,7 @@
   <a name="variables--define-where-used"></a><a name="13.4"></a>
   - [13.4](#variables--define-where-used) Atribua variáveis ​​onde você precisar delas, contanto que elas estejam em um local razoável.
 
-    > Why? `let` e `const` têm escopo de bloco e não de função..
+    > `let` e `const` têm escopo de bloco e não de função..
 
     ```javascript
     // Ruim
