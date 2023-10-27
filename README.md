@@ -3,9 +3,12 @@
 ## Sumário
 
 
-1. [a](#a)
-2. [a](#a)
-3. [a](#a)
+1. [Referências](#Referências)
+2. [Objetos](#Objetos)
+3. [Arrays](#Arrays)
+4. [Strings](#Strings)
+5. [Functions](#Functions)
+6. [Variaveis](#Variaveis)
 
 
 ## Tipos de variaveis primitivas
@@ -140,7 +143,7 @@
     ```
 
     <a name="objects--prototype-builtins"></a>
-  - [3.4](#objects--prototype-builtins) Não chame `Object.prototype` de forma literal, como `hasOwnProperty`, `propertyIsEnumerable`, e `isPrototypeOf`. eslint: [`no-prototype-builtins`](https://eslint.org/docs/rules/no-prototype-builtins)
+  - [3.4](#objects--prototype-builtins) Não chame `Object.prototype` de forma literal, como `hasOwnProperty`, `propertyIsEnumerable`, e `isPrototypeOf`. [`no-prototype-builtins`](https://eslint.org/docs/rules/no-prototype-builtins)
 
     > Métodos como esse podem ser ocultados pelas propriedades do objeto - `{ hasOwnProperty: false }` - ou o objeto pode ser um objeto nulo (`Object.create(null)`).`Object.prototype.hasOwnProperty.call`.
 
@@ -171,18 +174,17 @@
     ```javascript
     // Muito ruim
     const original = { a: 1, b: 2 };
-    const copy = Object.assign(original, { c: 3 }); // this mutates `original` ಠ_ಠ
+    const copy = Object.assign(original, { c: 3 }); 
     delete copy.a;
 
     // Ruim
     const original = { a: 1, b: 2 };
-    const copy = Object.assign({}, original, { c: 3 }); // copy => { a: 1, b: 2, c: 3 }
+    const copy = Object.assign({}, original, { c: 3 });
 
     // Boom
     const original = { a: 1, b: 2 };
-    const copy = { ...original, c: 3 }; // copy => { a: 1, b: 2, c: 3 }
-
-    const { a, ...noA } = copy; // noA => { b: 2, c: 3 }
+    const copy = { ...original, c: 3 };
+    const { a, ...noA } = copy;
     ```
 
     ## Arrays
@@ -428,8 +430,6 @@
   <a name="functions--declarations"></a><a name="7.1"></a>
   - [7.1](#functions--declarations) Use expressoões de função nomeadas em vez de declaração. [`func-style`](https://eslint.org/docs/rules/func-style), [`func-names`](https://eslint.org/docs/latest/rules/func-names)
 
-    > Why? Function declarations are hoisted, which means that it’s easy - too easy - to reference the function before it is defined in the file. This harms readability and maintainability. If you find that a function’s definition is large or complex enough that it is interfering with understanding the rest of the file, then perhaps it’s time to extract it to its own module! Don’t forget to explicitly name the expression, regardless of whether or not the name is inferred from the containing variable (which is often the case in modern browsers or when using compilers such as Babel). This eliminates any assumptions made about the Error’s call stack. ([Discussion](https://github.com/airbnb/javascript/issues/794))
-
     ```javascript
     // Ruim
     function foo() {
@@ -513,19 +513,16 @@
     ```
 
   <a name="es6-default-parameters"></a><a name="7.7"></a>
-  - [7.7](#es6-default-parameters) Use default parameter syntax rather than mutating function arguments.
+  - [7.7](#es6-default-parameters) Use o padrão da sintaxe.
 
     ```javascript
-    // really bad
+    // Muito ruim
     function handleThings(opts) {
-      // No! We shouldn’t mutate function arguments.
-      // Double bad: if opts is falsy it'll be set to an object which may
-      // be what you want but it can introduce subtle bugs.
       opts = opts || {};
       // ...
     }
 
-    // still bad
+    // Ruim
     function handleThings(opts) {
       if (opts === void 0) {
         opts = {};
@@ -533,20 +530,20 @@
       // ...
     }
 
-    // good
+    // Bom
     function handleThings(opts = {}) {
       // ...
     }
     ```
 
   <a name="functions--default-side-effects"></a><a name="7.8"></a>
-  - [7.8](#functions--default-side-effects) Avoid side effects with default parameters.
+  - [7.8](#functions--default-side-effects) É bom evitar efeitos em parâmetros padrão.
 
-    > Why? They are confusing to reason about.
+    > Dificultam o entendimento
 
     ```javascript
     let b = 1;
-    // bad
+    // Ruim
     function count(a = b++) {
       console.log(a);
     }
@@ -557,15 +554,15 @@
     ```
 
   <a name="functions--defaults-last"></a><a name="7.9"></a>
-  - [7.9](#functions--defaults-last) Always put default parameters last. eslint: [`default-param-last`](https://eslint.org/docs/rules/default-param-last)
+  - [7.9](#functions--defaults-last) É muito importante colocar os parâmetros com padrão por último. [`default-param-last`](https://eslint.org/docs/rules/default-param-last)
 
     ```javascript
-    // bad
+    // Ruim
     function handleThings(opts = {}, name) {
       // ...
     }
 
-    // good
+    // Bom
     function handleThings(name, opts = {}) {
       // ...
     }
@@ -574,56 +571,54 @@
   <a name="functions--constructor"></a><a name="7.10"></a>
   - [7.10](#functions--constructor) Never use the Function constructor to create a new function. eslint: [`no-new-func`](https://eslint.org/docs/rules/no-new-func)
 
-    > Why? Creating a function in this way evaluates a string similarly to `eval()`, which opens vulnerabilities.
+    > Criar uma função desta forma a string se assemelha a `eval()`, que o deixa frágil.
 
     ```javascript
-    // bad
+    // Ruim
     const add = new Function('a', 'b', 'return a + b');
 
-    // still bad
+    // Ruim
     const subtract = Function('a', 'b', 'return a - b');
     ```
 
   <a name="functions--signature-spacing"></a><a name="7.11"></a>
-  - [7.11](#functions--signature-spacing) Spacing in a function signature. eslint: [`space-before-function-paren`](https://eslint.org/docs/rules/space-before-function-paren) [`space-before-blocks`](https://eslint.org/docs/rules/space-before-blocks)
-
-    > Why? Consistency is good, and you shouldn’t have to add or remove a space when adding or removing a name.
+  - [7.11](#functions--signature-spacing) Espaçamento em uma função. [`space-before-function-paren`](https://eslint.org/docs/rules/space-before-function-paren) [`space-before-blocks`](https://eslint.org/docs/rules/space-before-blocks)
 
     ```javascript
-    // bad
+    // Ruim
     const f = function(){};
     const g = function (){};
     const h = function() {};
 
-    // good
+    // Bom
     const x = function () {};
     const y = function a() {};
     ```
 
   <a name="functions--mutate-params"></a><a name="7.12"></a>
-  - [7.12](#functions--mutate-params) Never mutate parameters. eslint: [`no-param-reassign`](https://eslint.org/docs/rules/no-param-reassign)
+  - [7.12](#functions--mutate-params) Não altere parâmetros. [`no-param-reassign`](https://eslint.org/docs/rules/no-param-reassign)
 
-    > Why? Manipulating objects passed in as parameters can cause unwanted variable side effects in the original caller.
+    > A manipulação de objetos pode causar variáveis ​​indesejadas.
 
     ```javascript
-    // bad
+    // Ruim
     function f1(obj) {
       obj.key = 1;
     }
 
-    // good
+    // Bom
     function f2(obj) {
       const key = Object.prototype.hasOwnProperty.call(obj, 'key') ? obj.key : 1;
     }
     ```
 
   <a name="functions--reassign-params"></a><a name="7.13"></a>
-  - [7.13](#functions--reassign-params) Never reassign parameters. eslint: [`no-param-reassign`](https://eslint.org/docs/rules/no-param-reassign)
+  - [7.13](#functions--reassign-params) Não reatribua parâmetros. [`no-param-reassign`](https://eslint.org/docs/rules/no-param-reassign)
 
-    > Why? Reassigning parameters can lead to unexpected behavior, especially when accessing the `arguments` object. It can also cause optimization issues, especially in V8.
+    > Reatribuir parâmetros pode levar a bugs se não for feita de maneira correta.
 
     ```javascript
-    // bad
+    // Ruim
     function f1(a) {
       a = 1;
       // ...
@@ -634,7 +629,7 @@
       // ...
     }
 
-    // good
+    // Bom
     function f3(a) {
       const b = a || 1;
       // ...
@@ -646,38 +641,38 @@
     ```
 
   <a name="functions--spread-vs-apply"></a><a name="7.14"></a>
-  - [7.14](#functions--spread-vs-apply) Prefer the use of the spread syntax `...` to call variadic functions. eslint: [`prefer-spread`](https://eslint.org/docs/rules/prefer-spread)
+  - [7.14](#functions--spread-vs-apply) Prefira o uso da sintaxe spread `...` para chamar funções variadas. [`prefer-spread`](https://eslint.org/docs/rules/prefer-spread)
 
-    > Why? It’s cleaner, you don’t need to supply a context, and you can not easily compose `new` with `apply`.
+    > Você não precisa de um contexto e não consegue compor algo novo com `new` e `apply`.
 
     ```javascript
-    // bad
+    // Ruim
     const x = [1, 2, 3, 4, 5];
     console.log.apply(console, x);
 
-    // good
+    // Bom
     const x = [1, 2, 3, 4, 5];
     console.log(...x);
 
-    // bad
+    // Ruim
     new (Function.prototype.bind.apply(Date, [null, 2016, 8, 5]));
 
-    // good
+    // Bom
     new Date(...[2016, 8, 5]);
     ```
 
   <a name="functions--signature-invocation-indentation"></a>
-  - [7.15](#functions--signature-invocation-indentation) Functions with multiline signatures, or invocations, should be indented just like every other multiline list in this guide: with each item on a line by itself, with a trailing comma on the last item. eslint: [`function-paren-newline`](https://eslint.org/docs/rules/function-paren-newline)
+  - [7.15](#functions--signature-invocation-indentation) Funções devem ser lidadas como qualquer outra lista multilinhas, com cada item em uma linha por si só, com uma vírgula final no último item. [`function-paren-newline`](https://eslint.org/docs/rules/function-paren-newline)
 
     ```javascript
-    // bad
+    // Ruim
     function foo(bar,
                  baz,
                  quux) {
       // ...
     }
 
-    // good
+    // Bom
     function foo(
       bar,
       baz,
@@ -686,15 +681,231 @@
       // ...
     }
 
-    // bad
+    // Ruim
     console.log(foo,
       bar,
       baz);
 
-    // good
+    // Bom
     console.log(
       foo,
       bar,
       baz,
     );
     ```
+
+    ## Variaveis
+
+  <a name="variables--const"></a><a name="13.1"></a>
+  - [13.1](#variables--const) Sempre use `const` ou `let` para declarar variáveis. [`no-undef`](https://eslint.org/docs/rules/no-undef) [`prefer-const`](https://eslint.org/docs/rules/prefer-const)
+
+    ```javascript
+    // Ruim
+    superPower = new SuperPower();
+
+    // Bom
+    const superPower = new SuperPower();
+    ```
+
+  <a name="variables--one-const"></a><a name="13.2"></a>
+  - [13.2](#variables--one-const) Use `const` ou `let` como uma declaração por variável ou atribuição. [`one-var`](https://eslint.org/docs/rules/one-var)
+
+    >  É mais fácil adicionar novas declarações de variáveis ​​dessa maneira e você nunca precisa se preocupar em trocar um `;` para `,`.
+    ```javascript
+    // Ruim
+    const items = getItems(),
+        goSportsTeam = true,
+        dragonball = 'z';
+
+    // Ruim
+    const items = getItems(),
+        goSportsTeam = true;
+        dragonball = 'z';
+
+    // Bom
+    const items = getItems();
+    const goSportsTeam = true;
+    const dragonball = 'z';
+    ```
+
+  <a name="variables--const-let-group"></a><a name="13.3"></a>
+  - [13.3](#variables--const-let-group) Agrupe as `const` e suas `let`.
+
+    > Isso é útil quando mais tarde você precisar atribuir uma variável dependendo de uma das variáveis ​​atribuídas anteriormente.
+
+    ```javascript
+    // Ruim
+    let i, len, dragonball,
+        items = getItems(),
+        goSportsTeam = true;
+
+    // Ruim
+    let i;
+    const items = getItems();
+    let dragonball;
+    const goSportsTeam = true;
+    let len;
+
+    // Bom
+    const goSportsTeam = true;
+    const items = getItems();
+    let dragonball;
+    let i;
+    let length;
+    ```
+
+  <a name="variables--define-where-used"></a><a name="13.4"></a>
+  - [13.4](#variables--define-where-used) Atribua variáveis ​​onde você precisar delas, contanto que elas estejam em um local razoável.
+
+    > Why? `let` e `const` têm escopo de bloco e não de função..
+
+    ```javascript
+    // Ruim
+    function checkName(hasName) {
+      const name = getName();
+
+      if (hasName === 'test') {
+        return false;
+      }
+
+      if (name === 'test') {
+        this.setName('');
+        return false;
+      }
+
+      return name;
+    }
+
+    // Bom
+    function checkName(hasName) {
+      if (hasName === 'test') {
+        return false;
+      }
+
+      const name = getName();
+
+      if (name === 'test') {
+        this.setName('');
+        return false;
+      }
+
+      return name;
+    }
+    ```
+
+  <a name="variables--no-chain-assignment"></a><a name="13.5"></a>
+  - [13.5](#variables--no-chain-assignment) Cuitado ao atribir algo a variaveis. [`no-multi-assign`](https://eslint.org/docs/rules/no-multi-assign)
+
+
+    ```javascript
+    // Ruim
+    (function example() {
+      let a = b = c = 1;
+    }());
+
+    console.log(a); //
+    console.log(b); // 1
+    console.log(c); // 1
+
+    // Bom
+    (function example() {
+      let a = 1;
+      let b = a;
+      let c = a;
+    }());
+
+    console.log(a);
+    console.log(b);
+    console.log(c);
+    ```
+
+  <a name="variables--unary-increment-decrement"></a><a name="13.6"></a>
+  - [13.6](#variables--unary-increment-decrement) Atribuições de variáveis ​​cria variáveis ​​globais implícitas. (`++`, `--`). [`no-plusplus`](https://eslint.org/docs/rules/no-plusplus)
+
+    ```javascript
+    // Ruim
+
+    const array = [1, 2, 3];
+    let num = 1;
+    num++;
+    --num;
+
+    let sum = 0;
+    let truthyCount = 0;
+    for (let i = 0; i < array.length; i++) {
+      let value = array[i];
+      sum += value;
+      if (value) {
+        truthyCount++;
+      }
+    }
+
+    // Bom
+
+    const array = [1, 2, 3];
+    let num = 1;
+    num += 1;
+    num -= 1;
+
+    const sum = array.reduce((a, b) => a + b, 0);
+    const truthyCount = array.filter(Boolean).length;
+    ```
+
+<a name="variables--linebreak"></a>
+  - [13.7](#variables--linebreak) Evite quebras de linha antes ou depois de `=` em uma tarefa. Se sua atribuição violar [`max-len`](https://eslint.org/docs/rules/max-len), coloque o valor entre parênteses. [`operator-linebreak`](https://eslint.org/docs/rules/operator-linebreak).
+
+    > Quebras de linha ao redor de `=` podem gerar um bug e não mostrar o valor de uma atribuição.
+
+    ```javascript
+    // Ruim
+    const foo =
+      superLongLongLongLongLongLongLongLongFunctionName();
+
+    // Ruim
+    const foo
+      = 'superLongLongLongLongLongLongLongLongString';
+
+    // Bom
+    const foo = (
+      superLongLongLongLongLongLongLongLongFunctionName()
+    );
+
+    // Bom
+    const foo = 'superLongLongLongLongLongLongLongLongString';
+    ```
+
+<a name="variables--no-unused-vars"></a>
+  - [13.8](#variables--no-unused-vars) Cuidado com variáveis ​​não utilizadas. [`no-unused-vars`](https://eslint.org/docs/rules/no-unused-vars)
+
+    > Variáveis ​​que são declaradas e não usadas em nenhum lugar do código um erro devido à refatoração. Essas variáveis ​​ocupam espaço no código e podem confundir.
+
+    ```javascript
+    // Ruim
+
+    const some_unused_var = 42;
+
+    let y = 10;
+    y = 5;
+
+    let z = 0;
+    z = z + 1;
+
+    function getX(x, y) {
+        return x;
+    }
+
+    // Bom
+
+    function getXPlusY(x, y) {
+      return x + y;
+    }
+
+    const x = 1;
+    const y = a + 2;
+
+    alert(getXPlusY(x, y));
+
+    const { type, ...coords } = data;
+    ```
+
+**[⬆ back to top](#table-of-contents)**
